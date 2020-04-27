@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,11 +19,11 @@ class Subject extends Model
     // Relacionamentos
     public function grade()
     {
-        return $this->belongsTo('App\Grade');
+        return $this->belongsTo('App\Models\Grade');
     }
 
     public function topics()
     {
-        return $this->hasMany('App\Topic');
+        return $this->hasMany('App\Models\Topic');
     }
 }

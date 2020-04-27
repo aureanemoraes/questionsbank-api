@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,26 +14,30 @@ class Question extends Model
         'question_description_id',
         'answer_type_id',
         'question_level_id',
-        'teacher_user_id'
+        'teacher_user_id',
+        'area_id'
     ];
 
     // Relacionamentos
     public function questionDescription()
     {
-        return $this->belongsTo('App\QuestionDescription');
+        return $this->belongsTo('App\Models\QuestionDescription');
     }
 
     public function answerType()
     {
-        return $this->belongsTo('App\AnswerType');
+        return $this->belongsTo('App\Models\AnswerType');
     }
 
     public function questionLevel()
     {
-        return $this->belongsTo('App\QuestionLevel');
+        return $this->belongsTo('App\Models\QuestionLevel');
     }
     public function teacherUser()
     {
-        return $this->belongsTo('App\TeacherUser', 'foreign_key', 'other_key');
+        return $this->belongsTo('App\Models\TeacherUser');
+    }
+    public function area() {
+        return $this->belongsTo('App\Models\Area');
     }
 }

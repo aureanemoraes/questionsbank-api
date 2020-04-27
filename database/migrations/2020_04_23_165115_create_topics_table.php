@@ -16,6 +16,10 @@ class CreateTopicsTable extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->unsignedBigInteger('area_id');
+            $table->foreign('area_id')->references('id')->on('areas')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

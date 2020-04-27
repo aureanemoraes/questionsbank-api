@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 //Models
-Use App\Subject;
-Use App\Grade;
+Use App\Models\Subject;
+Use App\Models\Grade;
 
 // Resources
 Use App\Http\Resources\Subject as SubjectResource;
@@ -44,10 +44,18 @@ class SubjectController extends Controller
 
         // Criando item
         return new SubjectResource(Subject::create([
-            'name' => ucfirst($req->name),
+            'name' => $req->name,
             'grade_id' => $req->grade_id,
             'slug' => $slug
         ]));
+    }
+
+    public function show($id) {
+        $subject = Subject::with(['grade', 'topics'])->find($id);
+        
+        if(!$subject) return response(['error' => 'Item not found.'], 404);
+
+        return new SubjectResource($subject);
     }
 
     public function update($id, Request $req) {

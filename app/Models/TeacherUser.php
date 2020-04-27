@@ -1,25 +1,23 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Topic extends Model
+class TeacherUser extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
+        'cpf',
         'name',
-        'slug',
-        'subject_id'
+        'isValid'
     ];
 
     // Relacionamentos
-    public function subject()
+    public function questions()
     {
-        return $this->belongsTo('App\Subject');
+        return $this->hasMany('App\Models\Question');
     }
-
-
 }

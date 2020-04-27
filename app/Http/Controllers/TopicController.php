@@ -5,8 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 //Models
-Use App\Topic;
-Use App\Subject;
+Use App\Models\Topic;
+Use App\Models\Subject;
+Use App\Models\Area;
 
 // Resources
 Use App\Http\Resources\Topic as TopicResource;
@@ -18,20 +19,22 @@ use Illuminate\Support\Str;
 class TopicController extends Controller
 {
     public function index() {
-        return new TopicCollectionResource(Topic::with(['subject'])->get());
+        return new TopicCollectionResource(Topic::with(['subject', 'area'])->get());
     }
 
     public function store(Request $req){
         // Validação de dados
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
-            'subject_id' => 'required|integer'
+            'subject_id' => 'required|integer',
+            'area_id' => 'required|string'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
 
         // Verificando se as FK são válidas
         $subject = Subject::find($req->subject_id);
-        if(!$subject) return response(['error' => 'Invalid entries'], 404);
+        $area = Area::find($req->area_id);
+        if(!($subject && $area)) return response(['error' => 'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -42,17 +45,27 @@ class TopicController extends Controller
 
         // Criando item
         return new TopicResource(Topic::create([
-            'name' => ucfirst($req->name),
+            'name' => $req->name,
             'subject_id' => $req->subject_id,
+            'area_id' => $req->area_id,
             'slug' => $slug,
         ]));
+    }
+
+    public function show($id) {
+        $topic = Topic::with(['subject', 'area'])->find($id);
+        
+        if(!$topic) return response(['error' => 'Item not found.'], 404);
+
+        return new TopicResource($topic);
     }
 
     public function update($id, Request $req) {
         // Validação de dados
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
-            'subject_id' => 'required|integer'
+            'subject_id' => 'required|integer',
+            'area_id' => 'required|string'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
 
@@ -62,7 +75,8 @@ class TopicController extends Controller
 
         // Verificando se as FK são válidas
         $subject = Subject::find($req->subject_id);
-        if(!$subject) return response(['error' =>'Invalid entries'], 404);
+        $area = Area::find($req->area_id);
+        if(!($subject && $area)) return response(['error' =>'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -74,6 +88,7 @@ class TopicController extends Controller
         // Atualizando item
         $topic->name = $req->name;
         $topic->subject_id = $req->subject_id;
+        $topic->area_id = $req->area_id;
         $topic->slug = $slug;
         $topic->save();
 
@@ -90,4 +105,5 @@ class TopicController extends Controller
         $topic->delete();
         return response('', 204);
     }
+
 }

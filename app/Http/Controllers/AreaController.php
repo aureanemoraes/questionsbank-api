@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-//Models
-Use App\Models\Grade;
+// Models
+use App\Models\Area;
+
 // Resources
-Use App\Http\Resources\Grade as GradeResource;
-Use App\Http\Resources\GradeCollection as GradeCollectionResource;
+Use App\Http\Resources\Area as AreaResource;
+Use App\Http\Resources\AreaCollection as AreaCollectionResource;
 
 // Helpers
 use Illuminate\Support\Str;
 
-class GradeController extends Controller
+class AreaController extends Controller
 {
     public function index() {
-        return new GradeCollectionResource(Grade::with(['subjects'])->get());
+        return new AreaCollectionResource(Area::with(['topics', 'questions'])->get());
     }
-
+    
     public function store(Request $req) {
         // Validação de dados
         $validator = Validator::make($req->all(), [
@@ -30,22 +31,22 @@ class GradeController extends Controller
         $slug = Str::slug($req->name, '-');
 
         // Verificando se o item existe no DB
-        $grade = Grade::where('slug', $slug)->first();
-        if ($grade) return response(['error' => 'Item already registered.'], 400);
+        $area = Area::where('slug', $slug)->first();
+        if ($area) return response(['error' => 'Item already registered.'], 404);
 
         // Criando item
-        return new GradeResource(Grade::create([
+        return new AreaResource(Area::create([
             'name' => $req->name,
             'slug' => $slug
         ]));
     }
 
     public function show($id) {
-        $grade = Grade::with(['subjects'])->find($id);
+        $area = Area::with(['topics', 'questions'])->find($id);
         
-        if(!$grade) return response(['error' => 'Item not found.'], 404);
+        if(!$area) return response(['error' => 'Item not found.'], 404);
 
-        return new GradeResource($grade);
+        return new AreaResource($area);
     }
 
     public function update($id, Request $req) {
@@ -57,33 +58,31 @@ class GradeController extends Controller
         if($validator->fails()) return response($validator->errors(), 400);
 
         // Verificando se o item existe no DB
-        $grade = Grade::find($id);
-        if(!$grade) return response(['error' => 'Item not found'], 404);
+        $area = Area::find($id);
+        if(!$area) return response(['error' => 'Item not found.'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
 
         // Verificando se já existe um item cadastrado com o mesmo nome
-        $gradeExists = Grade::where('slug', $slug)->first();
-        if($gradeExists) return response(['error' => 'Item already exists.'], 400);
+        $areaExists = Area::where('slug', $slug)->first();
+        if($areaExists) return response(['error' => 'Item already exists.'], 400);
 
         // Atualizando item
-        $grade->name = $req->name;
-        $grade->slug = $slug;
-        $grade->save();
+        $area->name = $req->name;
+        $area->slug = $slug;
+        $area->save();
 
-        return new GradeResource($grade);
-
+        return new AreaResource($area);
     }
 
     public function destroy($id) {
         // Verificando se o item existe no DB
-        $grade = Grade::find($id);
-        if(!$grade) return response(['error' => 'Item not found'], 404);
+        $area = Area::find($id);
+        if(!$area) return response(['error' => 'Item not found'], 404);
 
         // Deletando item
-        $grade->delete();
+        $area->delete();
         return response('', 204);
     }
-
 }

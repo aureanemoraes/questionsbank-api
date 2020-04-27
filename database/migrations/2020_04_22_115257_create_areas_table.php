@@ -4,22 +4,20 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTeacherUsersTable extends Migration
+class CreateAreasTable extends Migration
 {
     public function up()
     {
-        Schema::create('teacher_users', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('cpf');
             $table->string('name');
-            $table->boolean('isValid')->default(false);
-            $table->softDeletes();
+            $table->string('slug');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('teacher_users');
+        Schema::dropIfExists('areas');
     }
 }
