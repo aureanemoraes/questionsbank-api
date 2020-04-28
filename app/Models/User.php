@@ -6,19 +6,43 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class User extends Authenticatable
 {
-    use Notifiable;
+    use SoftDeletes, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'cpf',
+        'name',
+        'email',
+        'password',
+        'verified_at',
+        'level',
+        'sigeduc_id'
     ];
 
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    // Definindo CPF como primary key
+    protected $primaryKey = 'cpf';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    //protected $hidden = [
+    //    'password', 'remember_token',
+    //];
+
+    //protected $casts = [
+    //    'email_verified_at' => 'datetime',
+    //];
+
+    // Relacionamentos
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
+
+    public function questionbook()
+    {
+        return $this->hasMany('App\Models\QuestionBook');
+    }
 }

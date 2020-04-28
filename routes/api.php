@@ -12,5 +12,6 @@ Route::apiResources([
     'grades' => 'GradeController',
     'subjects' => 'SubjectController',
     'topics' => 'TopicController',
-    'teacherUsers' => 'TeacherUserController'
+    'users' => 'UserController',
+    'answertypes' => 'AnswerTypeController'
 ]);

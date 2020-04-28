@@ -33,9 +33,9 @@ class Question extends Model
     {
         return $this->belongsTo('App\Models\QuestionLevel');
     }
-    public function teacherUser()
+    public function user()
     {
-        return $this->belongsTo('App\Models\TeacherUser');
+        return $this->belongsTo('App\Models\User');
     }
     public function area() {
         return $this->belongsTo('App\Models\Area');
