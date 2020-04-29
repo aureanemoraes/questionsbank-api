@@ -74,6 +74,20 @@ class QuestionController extends Controller
         ])->where('id', $question->id)->first());
     }
 
+    public function show($id, Request $req) {
+        $question = Question::with([
+            'answerType',
+            'questionDescription',
+            'questionLevel',
+            'user',
+            'area'
+        ])->find($id);
+
+        if(!$question) return response(['error' => 'Item not found.'], 404);
+
+        return new QuestionResource($question);
+    }
+
     public function update($id, Request $req) {
         // Verificando se o item existe no DB
         $question = Question::find($id);
@@ -104,13 +118,12 @@ class QuestionController extends Controller
         $question->save();
 
         // Verificando se há descrição e armazenando
-        if($req->description){
-            $description = new QuestionDescription([
-                'description' => $req->description
-            ]);
-            $question->questionDescription()->save($description);
+        if($req->description) {
+            new QuestionDescriptionResource(QuestionDescription::updateOrCreate(
+                    ['question_id' => $question->id],
+                    ['description' => $req->description]
+                ));
         } else {
-            //$description = QuestionDescription::find($req->);
             $question->questionDescription()->delete();
         }
 
@@ -121,5 +134,16 @@ class QuestionController extends Controller
             'user',
             'area'
         ])->where('id', $question->id)->first());
+    }
+
+    public function destroy($id) {
+        // Verificando se o item existe no DB
+        $question = Question::find($id);
+        if(!$question) return response(['error' => 'Item not found'], 404);
+
+        // Deletando item
+        $question->questionDescription()->delete();
+        $question->delete();
+        return response('', 204);
     }
 }

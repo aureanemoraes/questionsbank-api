@@ -29,9 +29,14 @@ class User extends Authenticatable
     protected $keyType = 'string';
     public $incrementing = false;
 
-    //protected $hidden = [
-    //    'password', 'remember_token',
-    //];
+    protected $hidden = [
+        'password',
+        'verified_at',
+        'sigeduc_id',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
     //protected $casts = [
     //    'email_verified_at' => 'datetime',

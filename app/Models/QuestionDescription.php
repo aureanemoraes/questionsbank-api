@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QuestionDescription extends Model
 {
-    use SoftDeletes;
-
     protected $fillable = [
-        'description'
+        'description',
+        'question_id'
     ];
 
     protected $hidden = [

@@ -16,7 +16,6 @@ class CreateQuestionDescriptionsTable extends Migration
                 ->on('questions')
                 ->onUpdate('cascade')
                 ->onDelete('restrict');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

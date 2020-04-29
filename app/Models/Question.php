@@ -11,12 +11,20 @@ class Question extends Model
 
     protected $fillable = [
         'title',
-        'description',
-        'question_description_id',
+        'description'
+    ];
+
+    protected $hidden = [
+        'updated_at',
+        'deleted_at',
         'answer_type_id',
         'question_level_id',
         'user_cpf',
         'area_id'
+    ];
+
+    protected $casts = [
+        'created_at' => 'date:d-m-Y',
     ];
 
     // Relacionamentos
