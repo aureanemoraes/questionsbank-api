@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Validator;
 //Models
 Use App\Models\Topic;
 Use App\Models\Subject;
-Use App\Models\Area;
 Use App\Models\Grade;
 
 // Resources
@@ -22,7 +21,6 @@ class TopicController extends Controller
     public function index() {
         return new TopicCollectionResource(Topic::with([
             'subject',
-            'area',
             'grade'
         ])->get());
     }
@@ -32,16 +30,14 @@ class TopicController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
             'subject_id' => 'required|integer',
-            'area_id' => 'required|integer',
             'grade_id' => 'required|integer'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
 
         // Verificando se as FK são válidas
         $subject = Subject::find($req->subject_id);
-        $area = Area::find($req->area_id);
         $grade = Grade::find($req->grade_id);
-        if(!($subject && $area && $grade)) return response(['error' => 'Invalid entries'], 404);
+        if(!($subject && $grade)) return response(['error' => 'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -54,14 +50,13 @@ class TopicController extends Controller
         return new TopicResource(Topic::create([
             'name' => $req->name,
             'subject_id' => $req->subject_id,
-            'area_id' => $req->area_id,
             'grade_id' => $req->grade_id,
             'slug' => $slug,
         ]));
     }
 
     public function show($id) {
-        $topic = Topic::with(['subject', 'area', 'grade'])->find($id);
+        $topic = Topic::with(['subject', 'grade'])->find($id);
 
         if(!$topic) return response(['error' => 'Item not found.'], 404);
 
@@ -73,7 +68,6 @@ class TopicController extends Controller
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
             'subject_id' => 'required|integer',
-            'area_id' => 'required|integer',
             'grade_id' => 'required|integer'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
@@ -84,9 +78,8 @@ class TopicController extends Controller
 
         // Verificando se as FK são válidas
         $subject = Subject::find($req->subject_id);
-        $area = Area::find($req->area_id);
         $grade = Grade::find($req->grade_id);
-        if(!($subject && $area && $grade)) return response(['error' =>'Invalid entries'], 404);
+        if(!($subject && $grade)) return response(['error' =>'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -98,7 +91,6 @@ class TopicController extends Controller
         // Atualizando item
         $topic->name = $req->name;
         $topic->subject_id = $req->subject_id;
-        $topic->area_id = $req->area_id;
         $topic->grade_id = $req->grade_id;
         $topic->slug = $slug;
         $topic->save();

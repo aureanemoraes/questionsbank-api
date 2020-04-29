@@ -13,13 +13,11 @@ class Topic extends Model
         'name',
         'slug',
         'subject_id',
-        'area_id',
         'grade_id'
     ];
 
     protected $hidden = [
         'subject_id',
-        'area_id',
         'grade_id',
         'created_at',
         'updated_at',
@@ -35,7 +33,4 @@ class Topic extends Model
         return $this->belongsTo('App\Models\Grade');
     }
 
-    public function area() {
-        return $this->belongsTo('App\Models\Area');
-    }
 }
