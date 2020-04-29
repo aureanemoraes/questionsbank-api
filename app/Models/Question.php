@@ -11,7 +11,11 @@ class Question extends Model
 
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'answer_type_id',
+        'question_level_id',
+        'teacher_id',
+        'area_id'
     ];
 
     protected $hidden = [
@@ -19,7 +23,7 @@ class Question extends Model
         'deleted_at',
         'answer_type_id',
         'question_level_id',
-        'user_cpf',
+        'teacher_id',
         'area_id'
     ];
 
@@ -42,9 +46,9 @@ class Question extends Model
     {
         return $this->belongsTo('App\Models\QuestionLevel');
     }
-    public function user()
+    public function teacher()
     {
-        return $this->belongsTo('App\Models\User', 'user_cpf', 'cpf');
+        return $this->belongsTo('App\Models\User', 'teacher_id', 'id');
     }
     public function area() {
         return $this->belongsTo('App\Models\Area');

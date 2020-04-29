@@ -21,8 +21,8 @@ class CreateQuestionsTable extends Migration
                 ->on('question_levels')
                 ->onUpdate('restrict')
                 ->onDelete('cascade');
-            $table->string('user_cpf');
-            $table->foreign('user_cpf')->references('cpf')
+            $table->unsignedBigInteger('teacher_id');
+            $table->foreign('teacher_id')->references('id')
                 ->on('users')
                 ->onUpdate('restrict')
                 ->onDelete('cascade');

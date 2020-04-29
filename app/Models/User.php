@@ -25,9 +25,9 @@ class User extends Authenticatable
     ];
 
     // Definindo CPF como primary key
-    protected $primaryKey = 'cpf';
-    protected $keyType = 'string';
-    public $incrementing = false;
+    //protected $primaryKey = 'cpf';
+    //protected $keyType = 'string';
+    //public $incrementing = false;
 
     protected $hidden = [
         'password',

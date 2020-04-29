@@ -26,7 +26,7 @@ class QuestionController extends Controller
             'answerType',
             'questionDescription',
             'questionLevel',
-            'user',
+            'teacher',
             'area'
         ])->get());
     }
@@ -53,7 +53,7 @@ class QuestionController extends Controller
             'title' => $req->title,
             'answer_type_id' => $req->answer_type_id,
             'question_level_id' => $req->question_level_id,
-            'user_cpf' => $req->user()->cpf,
+            'teacher_id' => $req->user()->id,
             'area_id' => $req->area_id
         ]));
 
@@ -69,7 +69,7 @@ class QuestionController extends Controller
             'answerType',
             'questionDescription',
             'questionLevel',
-            'user',
+            'teacher',
             'area'
         ])->where('id', $question->id)->first());
     }
@@ -79,7 +79,7 @@ class QuestionController extends Controller
             'answerType',
             'questionDescription',
             'questionLevel',
-            'user',
+            'teacher',
             'area'
         ])->find($id);
 
@@ -113,7 +113,7 @@ class QuestionController extends Controller
         $question->title = $req->title;
         $question->answer_type_id = $req->answer_type_id;
         $question->question_level_id = $req->question_level_id;
-        $question->user_cpf = $req->user()->cpf;
+        $question->teacher_id = $req->user()->cpf;
         $question->area_id = $req->area_id;
         $question->save();
 
@@ -131,7 +131,7 @@ class QuestionController extends Controller
             'answerType',
             'questionDescription',
             'questionLevel',
-            'user',
+            'teacher',
             'area'
         ])->where('id', $question->id)->first());
     }
