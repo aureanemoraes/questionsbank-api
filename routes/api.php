@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
+Route::group(['prefix' => 'auth'], function (){
+    Route::group(['middleware' => ['guest:api']], function () {
+        Route::post('login', 'AuthController@login');
+        Route::post('signup', 'AuthController@signup');
+    });
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('logout', 'AuthController@logout');
+        Route::get('getuser', 'AuthController@getUser');
+    });
+});
+
 Route::apiResources([
     'areas' => 'AreaController',
     'grades' => 'GradeController',
