@@ -12,4 +12,15 @@ class QuestionDescription extends Model
     protected $fillable = [
         'description'
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    public function question()
+    {
+        return $this->belongsTo('App\Models\Question');
+    }
 }

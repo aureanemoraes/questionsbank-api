@@ -11,17 +11,18 @@ class Question extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'question_description_id',
         'answer_type_id',
         'question_level_id',
-        'teacher_user_id',
+        'user_cpf',
         'area_id'
     ];
 
     // Relacionamentos
     public function questionDescription()
     {
-        return $this->belongsTo('App\Models\QuestionDescription');
+        return $this->hasOne('App\Models\QuestionDescription');
     }
 
     public function answerType()
@@ -35,7 +36,7 @@ class Question extends Model
     }
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User', 'user_cpf', 'cpf');
     }
     public function area() {
         return $this->belongsTo('App\Models\Area');

@@ -12,4 +12,16 @@ class QuestionBookDescription extends Model
     protected $fillable = [
         'description'
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+
+    // Relacionamentos
+    public function question()
+    {
+        return $this->belongsTo('App\Models\Question');
+    }
 }

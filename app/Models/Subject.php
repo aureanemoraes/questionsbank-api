@@ -10,18 +10,18 @@ class Subject extends Model
     use SoftDeletes;
     protected $fillable = [
         'name',
-        'slug',
-        'grade_id'
+        'slug'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     //protected $hidden = ['slug', 'created_at', 'updated_at'];
 
     // Relacionamentos
-    public function grade()
-    {
-        return $this->belongsTo('App\Models\Grade');
-    }
-
     public function topics()
     {
         return $this->hasMany('App\Models\Topic');

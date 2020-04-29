@@ -18,7 +18,7 @@ class AuthController extends AuthResponseController
         $validator = Validator::make($req->all(), [
             'cpf' => 'required|unique:users|max:11',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|max:255',
+            'email' => 'required|string|unique:users|max:255',
             'password' => 'required|min:6|max:20',
             'password_confirmation' => 'required|same:password'
         ]);

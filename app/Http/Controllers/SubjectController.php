@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Validator;
 
 //Models
 Use App\Models\Subject;
-Use App\Models\Grade;
 
 // Resources
 Use App\Http\Resources\Subject as SubjectResource;
@@ -20,20 +19,15 @@ use Illuminate\Support\Str;
 class SubjectController extends Controller
 {
     public function index() {
-        return new SubjectCollectionResource(Subject::with(['grade', 'topics'])->get());
+        return new SubjectCollectionResource(Subject::with(['topics'])->get());
     }
 
     public function store(Request $req) {
         // Validação de dados
         $validator = Validator::make($req->all(), [
-            'name' => 'required|string|max:255',
-            'grade_id' => 'required|integer'
+            'name' => 'required|string|max:255'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
-
-        // Verificando se as FK são válidas
-        $grade = Grade::find($req->grade_id);
-        if(!$grade) return response(['error' => 'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -45,14 +39,13 @@ class SubjectController extends Controller
         // Criando item
         return new SubjectResource(Subject::create([
             'name' => $req->name,
-            'grade_id' => $req->grade_id,
             'slug' => $slug
         ]));
     }
 
     public function show($id) {
-        $subject = Subject::with(['grade', 'topics'])->find($id);
-        
+        $subject = Subject::with(['topics'])->find($id);
+
         if(!$subject) return response(['error' => 'Item not found.'], 404);
 
         return new SubjectResource($subject);
@@ -62,17 +55,12 @@ class SubjectController extends Controller
         // Validação de dados
         $validator = Validator::make($req->all(), [
             'name' => 'required|string|max:255',
-            'grade_id' => 'required|integer'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
 
         // Verificando se o item existe no DB
         $subject = Subject::find($id);
         if(!$subject) return response(['error' => 'Item not found'], 404);
-
-        // Verificando se as FK são válidas
-        $grade = Grade::find($req->grade_id);
-        if(!$grade) return response(['error' => 'Invalid entries'], 404);
 
         // Gerando slug
         $slug = Str::slug($req->name, '-');
@@ -83,7 +71,6 @@ class SubjectController extends Controller
 
         // Atualizando item
         $subject->name = $req->name;
-        $subject->grade_id = $req->grade_id;
         $subject->slug = $slug;
         $subject->save();
 

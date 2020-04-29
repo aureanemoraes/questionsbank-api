@@ -14,6 +14,11 @@ class AnswerType extends Model
         'slug'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
     // Relacionamentos
     public function questions()
     {

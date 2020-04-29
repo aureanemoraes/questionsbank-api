@@ -11,14 +11,21 @@ class Grade extends Model
 
     protected $fillable = [
         'name',
+        'year',
         'slug'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     //protected $hidden = ['slug', 'created_at', 'updated_at'];
 
     // Relacionamentos
-    public function subjects()
+    public function topics()
     {
-        return $this->hasMany('App\Models\Subject');
+        return $this->hasMany('App\Models\Topic');
     }
 }

@@ -13,14 +13,28 @@ class Topic extends Model
         'name',
         'slug',
         'subject_id',
-        'area_id'
+        'area_id',
+        'grade_id'
+    ];
+
+    protected $hidden = [
+        'subject_id',
+        'area_id',
+        'grade_id',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     // Relacionamentos
-    public function subject()
-    {
+    public function subject() {
         return $this->belongsTo('App\Models\Subject');
     }
+
+    public function grade() {
+        return $this->belongsTo('App\Models\Grade');
+    }
+
     public function area() {
         return $this->belongsTo('App\Models\Area');
     }
