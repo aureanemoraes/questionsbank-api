@@ -84,4 +84,8 @@ class AnswerTypeController extends Controller
         $answerType->delete();
         return response('', 204);
     }
+
+    public function indexToOption() {
+        return new AnswerTypeCollectionResource(AnswerType::select('id', 'name')->get());
+    }
 }

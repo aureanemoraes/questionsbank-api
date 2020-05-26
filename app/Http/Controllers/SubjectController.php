@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Validator;
 
 //Models
 Use App\Models\Subject;
+Use App\Models\Grade;
+
 
 // Resources
 Use App\Http\Resources\Subject as SubjectResource;
@@ -19,7 +21,8 @@ use Illuminate\Support\Str;
 class SubjectController extends Controller
 {
     public function index() {
-        return new SubjectCollectionResource(Subject::with(['topics'])->get());
+        return new SubjectCollectionResource(Subject::with(['topics', 'grades'])
+        ->get());
     }
 
     public function store(Request $req) {
@@ -28,13 +31,6 @@ class SubjectController extends Controller
             'name' => 'required|string|max:255'
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
-
-        // Gerando slug
-        $slug = Str::slug($req->name, '-');
-
-        // Verificando se o item existe no DB
-        $subject = Subject::where('slug', $slug)->first();
-        if ($subject) return response(['error' => 'Item already registered.'], 400);
 
         // Criando item
         return new SubjectResource(Subject::create([
@@ -62,13 +58,6 @@ class SubjectController extends Controller
         $subject = Subject::find($id);
         if(!$subject) return response(['error' => 'Item not found'], 404);
 
-        // Gerando slug
-        $slug = Str::slug($req->name, '-');
-
-        // Verificando se já existe um item cadastrado com o mesmo nome
-        $subjectExists = Subject::where('slug', $slug)->first();
-        if($subjectExists) return response(['error' => 'Item already exists.'], 400);
-
         // Atualizando item
         $subject->name = $req->name;
         $subject->slug = $slug;
@@ -86,5 +75,13 @@ class SubjectController extends Controller
         // Deletando item
         $subject->delete();
         return response('', 204);
+    }
+
+    public function indexToOptions($grade_id) {
+        // receber o ID da GRADE
+        // enviar somente as máterias com o grade_id == ID
+        $subjects = Subject::where('grade_id', $grade_id)->get();
+
+        return response($subjects);
     }
 }

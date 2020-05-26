@@ -15,7 +15,8 @@ class Question extends Model
         'answer_type_id',
         'question_level_id',
         'teacher_id',
-        'area_id'
+        'optionsTitles',
+        'correctOption'
     ];
 
     protected $hidden = [
@@ -24,7 +25,7 @@ class Question extends Model
         'answer_type_id',
         'question_level_id',
         'teacher_id',
-        'area_id'
+        'correctOption'
     ];
 
     protected $casts = [
@@ -32,7 +33,7 @@ class Question extends Model
     ];
 
     // Relacionamentos
-    public function questionDescription()
+    public function description()
     {
         return $this->hasOne('App\Models\QuestionDescription');
     }
@@ -50,7 +51,22 @@ class Question extends Model
     {
         return $this->belongsTo('App\Models\User', 'teacher_id', 'id');
     }
-    public function area() {
-        return $this->belongsTo('App\Models\Area');
+    public function areas() {
+        return $this->hasMany('App\Models\AreasQuestion');
+    }
+
+    public function options()
+    {
+        return $this->hasMany('App\Models\Option');
+    }
+
+    public function correctOption()
+    {
+        return $this->hasMany('App\Models\QuestionCorrectOption');
+    }
+
+    public function topics()
+    {
+        return $this->hasMany('App\Models\TopicsQuestion');
     }
 }

@@ -84,4 +84,10 @@ class QuestionLevelController extends Controller
         $questionLevel->delete();
         return response('', 204);
     }
+
+    public function indexToOption() {
+        return new QuestionLevelCollectionResource(
+            QuestionLevel::select('id', 'name')->get()
+        );
+    }
 }

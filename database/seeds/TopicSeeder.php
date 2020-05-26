@@ -10,7 +10,6 @@ class TopicSeeder extends Seeder
             'name' => 'Logarítimo',
             'slug' => 'logaritimo',
             'subject_id' => 1,
-            'grade_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -19,7 +18,6 @@ class TopicSeeder extends Seeder
             'name' => 'função de primeiro grau',
             'slug' => 'funcao-de-primeiro-grau',
             'subject_id' => 1,
-            'grade_id' => 2,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -28,7 +26,6 @@ class TopicSeeder extends Seeder
             'name' => '1 guerra mundial',
             'slug' => '1-guerra-mundial',
             'subject_id' => 3,
-            'grade_id' => 4,
             'created_at' => now(),
             'updated_at' => now()
         ]);

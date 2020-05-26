@@ -8,21 +8,41 @@ class SubjectSeeder extends Seeder
     {
         DB::table('subjects')->insert([
             'name' => 'Matemática',
-            'slug' => 'matematica',
+            'grade_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
         DB::table('subjects')->insert([
             'name' => 'Português',
-            'slug' => 'portugues',
+            'grade_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
         DB::table('subjects')->insert([
             'name' => 'História',
-            'slug' => 'historia',
+            'grade_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('subjects')->insert([
+            'name' => 'Matemática',
+            'grade_id' => 2,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('subjects')->insert([
+            'name' => 'Português',
+            'grade_id' => 2,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('subjects')->insert([
+            'name' => 'História',
+            'grade_id' => 2,
             'created_at' => now(),
             'updated_at' => now()
         ]);

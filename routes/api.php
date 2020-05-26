@@ -14,7 +14,15 @@ Route::group(['middleware' => ['guest:api']], function () {
 });
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', 'AuthController@logout');
-    Route::get('getuser', 'AuthController@getUser');
+    Route::get('answertypes/options', 'AnswerTypeController@indexToOption');
+    Route::get('questionlevels/options', 'QuestionLevelController@indexToOption');
+    Route::get('grades/options', 'GradeController@indexToOptions');
+    Route::get('subjects/options/{grade_id}', 'SubjectController@indexToOptions');
+    Route::get('topics/options/{subject_id}', 'TopicController@indexToOption');
+
+
+
+
     Route::apiResources([
         'areas' => 'AreaController',
         'grades' => 'GradeController',
@@ -25,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         'questionlevels' => 'QuestionLevelController',
         'questions' => 'QuestionController'
     ]);
+
 });
 
 

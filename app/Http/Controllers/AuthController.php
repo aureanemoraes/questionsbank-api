@@ -7,11 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 // Models
 use App\Models\User;
-// Herdando AuthResponseController
-use App\Http\Controllers\AuthResponseController as AuthResponseController;
 
 
-class AuthController extends AuthResponseController
+class AuthController extends Controller
 {
     // Criando usuário
     public function signup(Request $req) {
@@ -22,7 +20,7 @@ class AuthController extends AuthResponseController
             'password' => 'required|min:6|max:20',
             'password_confirmation' => 'required|same:password'
         ]);
-        if($validator->fails()) return $this->sendError($validator->errors());
+        if($validator->fails()) return response($validator->errors());
 
         $inputs = $req->all();
         $inputs['password'] = bcrypt($req->password);
@@ -31,10 +29,10 @@ class AuthController extends AuthResponseController
         if($newUser) {
             $success['token'] = $newUser->createToken('token')->accessToken;
             $success['msg'] = 'Registration successfull.';
-            return $this->sendResponse($success);
+            return response($success);
         } else {
-            $error = "Registration failed.";
-            return $this->sendError($error, 401);
+            $error['error'] = "Registration failed.";
+            return response($error, 401);
         }
     }
 
@@ -45,27 +43,28 @@ class AuthController extends AuthResponseController
         ]);
 
         if($validator->fails()){
-            return $this->sendError($validator->errors());
+            return response($validator->errors());
         }
 
         $credentials = $req->all();
         if(!Auth::attempt($credentials)) {
-            $error = 'Unhauthorized.';
-            return $this->sendError($error, 401);
+            $error['error'] = 'Unhauthorized.';
+            return response($error, 401);
         }
         $user = $req->user();
         $success['token'] = $user->createToken('token')->accessToken;
-        return $this->sendResponse($success);
+        $success['user'] = $req->user();
+        return response($success);
     }
 
     public function logout(Request $req) {
         $isLogged = $req->user()->token()->revoke();
         if($isLogged) {
             $success['msg'] = 'Successfully logged out.';
-            return $this->sendResponse($success);
+            return response($success);
         } else {
-            $error = 'Something went wrong.';
-            return $this->sendResponse($error);
+            $error['error'] = 'Something went wrong.';
+            return response($error);
         }
     }
 }

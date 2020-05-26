@@ -109,4 +109,8 @@ class TopicController extends Controller
         return response('', 204);
     }
 
+    public function indexToOption($subject_id) {
+        $topics = Topic::where('subject_id', $subject_id)->get();
+        return $topics;
+    }
 }

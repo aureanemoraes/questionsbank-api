@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class GradeController extends Controller
 {
     public function index() {
-        return new GradeCollectionResource(Grade::with(['topics'])->get());
+        return new GradeCollectionResource(Grade::with(['subjects'])->get());
     }
 
     public function store(Request $req) {
@@ -27,13 +27,6 @@ class GradeController extends Controller
         ]);
         if($validator->fails()) return response($validator->errors(), 400);
 
-        // Gerando slug
-        $slug = Str::slug($req->name . '-' . $req->year, '-');
-
-        // Verificando se o item existe no DB
-        $grade = Grade::where('slug', $slug)->first();
-        if ($grade) return response(['error' => 'Item already registered.'], 400);
-
         // Criando item
         return new GradeResource(Grade::create([
             'name' => $req->name,
@@ -43,7 +36,7 @@ class GradeController extends Controller
     }
 
     public function show($id) {
-        $grade = Grade::with(['topics'])->find($id);
+        $grade = Grade::with(['subjects'])->find($id);
 
         if(!$grade) return response(['error' => 'Item not found.'], 404);
 
@@ -63,13 +56,6 @@ class GradeController extends Controller
         $grade = Grade::find($id);
         if(!$grade) return response(['error' => 'Item not found'], 404);
 
-        // Gerando slug
-        $slug = Str::slug($req->name . '-' . $req->year, '-');
-
-        // Verificando se já existe um item cadastrado com o mesmo nome
-        $gradeExists = Grade::where('slug', $slug)->first();
-        if($gradeExists) return response(['error' => 'Item already exists.'], 400);
-
         // Atualizando item
         $grade->name = $req->name;
         $grade->year = $req->year;
@@ -88,6 +74,11 @@ class GradeController extends Controller
         // Deletando item
         $grade->delete();
         return response('', 204);
+    }
+
+    public function indexToOptions() {
+        return new GradeCollectionResource(Grade::select('id', 'name', 'year')
+                                                ->get());
     }
 
 }
