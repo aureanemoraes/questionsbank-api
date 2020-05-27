@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'name'  => 'Professor',
             'email' => 'professor@teste.com',
             'password' => bcrypt('123456'),
+            'level' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
