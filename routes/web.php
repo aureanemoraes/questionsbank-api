@@ -2,7 +2,7 @@
 
 
 Route::get('/', function () {
-    return reponse(['QuestionsBankAPI' => 'This is a APIRest.']);
+    return ['QuestionsBankAPI' => 'This is a APIRest.'];
 });
 
 
